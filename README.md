@@ -1,6 +1,6 @@
 # LimeSurvey Golang API
 
-API for the [LimeSurvey](https://limesurvey.org) platform to be used by golang programs.
+Golang client for the [LimeSurvey](https://limesurvey.org) API.
 
 # LICENSE
 
