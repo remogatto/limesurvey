@@ -1,4 +1,4 @@
-package lsapi
+package limesurvey
 
 import (
 	"bytes"
@@ -132,7 +132,7 @@ func (api *LSAPI) ListParticipants(surveyID int, options ...interface{}) (map[st
 		attributes := make(map[string]interface{})
 		token := r.(map[string]interface{})["token"].(string)
 		pInfo := r.(map[string]interface{})["participant_info"]
-		if len(options) > 2 {
+		if len(options) > 3 {
 			if v, ok := options[3].([]string); ok {
 				attrNames = v
 			}
