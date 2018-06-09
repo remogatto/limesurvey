@@ -1,11 +1,5 @@
--- Create the DB
-
-DROP DATABASE IF EXISTS `limesurvey_test`;
-CREATE DATABASE limesurvey_test;
-USE limesurvey_test;
-
 -- Only prefixed tables with: lime_
--- Date of Dump: 08-Jun-2018
+-- Date of Dump: 09-Jun-2018
 --
 
 -- --------------------------------------------------------
@@ -202,7 +196,7 @@ CREATE TABLE `lime_groups` (
   `grelevance` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`gid`,`language`),
   KEY `groups_idx2` (`sid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_groups`
@@ -210,7 +204,8 @@ CREATE TABLE `lime_groups` (
 
 INSERT INTO `lime_groups` (`gid`,`sid`,`group_name`,`group_order`,`description`,`language`,`randomization_group`,`grelevance`) VALUES
 ('1', '181911', 'Group 1', '0', '', 'it', '', ''),
-('2', '297751', 'Group 2', '0', '', 'it', '', '');
+('2', '297751', 'Group 2', '0', '', 'it', '', ''),
+('3', '195163', 'Upload file', '0', '', 'it', '', '');
 
 
 -- --------------------------------------------------------
@@ -277,14 +272,15 @@ CREATE TABLE `lime_notifications` (
   PRIMARY KEY (`id`),
   KEY `entity` (`entity`,`entity_id`,`status`),
   KEY `hash` (`hash`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_notifications`
 --
 
 INSERT INTO `lime_notifications` (`id`,`entity`,`entity_id`,`title`,`message`,`status`,`importance`,`display_class`,`created`,`first_read`,`hash`) VALUES
-('1', 'user', '1', 'Nuovo aggiornamento disponibile (Versione corrente:170728)', 'E&#039; disponibile un aggiornamento di sicurezza.<a href=/index.php/admin/update>Fare click qui per utilizzare ComfortUpdate.</a>', 'read', '1', 'default', '2018-06-08 09:35:16', '2018-06-08 09:35:32', 'c2aabc4987fd335218a75a1de692b0054caa05274bec700c83537ce6e58e71f8');
+('1', 'user', '1', 'Nuovo aggiornamento disponibile (Versione corrente:170728)', 'E&#039; disponibile un aggiornamento di sicurezza.<a href=/index.php/admin/update>Fare click qui per utilizzare ComfortUpdate.</a>', 'read', '1', 'default', '2018-06-08 09:35:16', '2018-06-08 09:35:32', 'c2aabc4987fd335218a75a1de692b0054caa05274bec700c83537ce6e58e71f8'),
+('2', 'user', '1', 'New update available (Current version: 170728)', 'A security update is available.<a href=/index.php/admin/update>Click here to use ComfortUpdate.</a>', 'new', '1', 'default', '2018-06-09 07:03:18', NULL, '86d3365d046e405a332e1242dd54528365d025addc6f021d7e6be69f695781ba');
 
 
 -- --------------------------------------------------------
@@ -431,7 +427,7 @@ CREATE TABLE `lime_permissions` (
   `export_p` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idxPermissions` (`entity_id`,`entity`,`permission`,`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_permissions`
@@ -462,7 +458,19 @@ INSERT INTO `lime_permissions` (`id`,`entity`,`entity_id`,`uid`,`permission`,`cr
 ('22', 'survey', '297751', '1', 'surveysecurity', '1', '1', '1', '1', '0', '0'),
 ('23', 'survey', '297751', '1', 'statistics', '0', '1', '0', '0', '0', '0'),
 ('24', 'survey', '297751', '1', 'translations', '0', '1', '1', '0', '0', '0'),
-('25', 'survey', '297751', '1', 'assessments', '1', '1', '1', '1', '0', '0');
+('25', 'survey', '297751', '1', 'assessments', '1', '1', '1', '1', '0', '0'),
+('26', 'survey', '195163', '1', 'surveyactivation', '0', '0', '1', '0', '0', '0'),
+('27', 'survey', '195163', '1', 'surveycontent', '1', '1', '1', '1', '1', '1'),
+('28', 'survey', '195163', '1', 'surveylocale', '0', '1', '1', '0', '0', '0'),
+('29', 'survey', '195163', '1', 'survey', '0', '1', '0', '1', '0', '0'),
+('30', 'survey', '195163', '1', 'tokens', '1', '1', '1', '1', '1', '1'),
+('31', 'survey', '195163', '1', 'surveysettings', '0', '1', '1', '0', '0', '0'),
+('32', 'survey', '195163', '1', 'quotas', '1', '1', '1', '1', '0', '0'),
+('33', 'survey', '195163', '1', 'responses', '1', '1', '1', '1', '1', '1'),
+('34', 'survey', '195163', '1', 'surveysecurity', '1', '1', '1', '1', '0', '0'),
+('35', 'survey', '195163', '1', 'statistics', '0', '1', '0', '0', '0', '0'),
+('36', 'survey', '195163', '1', 'translations', '0', '1', '1', '0', '0', '0'),
+('37', 'survey', '195163', '1', 'assessments', '1', '1', '1', '1', '0', '0');
 
 
 -- --------------------------------------------------------
@@ -525,11 +533,14 @@ CREATE TABLE `lime_question_attributes` (
   PRIMARY KEY (`qaid`),
   KEY `question_attributes_idx2` (`qid`),
   KEY `question_attributes_idx3` (`attribute`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_question_attributes`
 --
+
+INSERT INTO `lime_question_attributes` (`qaid`,`qid`,`attribute`,`value`,`language`) VALUES
+('1', '3', 'allowed_filetypes', 'txt', NULL);
 
 
 -- --------------------------------------------------------
@@ -562,7 +573,7 @@ CREATE TABLE `lime_questions` (
   KEY `questions_idx3` (`gid`),
   KEY `questions_idx4` (`type`),
   KEY `parent_qid_idx` (`parent_qid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_questions`
@@ -570,7 +581,8 @@ CREATE TABLE `lime_questions` (
 
 INSERT INTO `lime_questions` (`qid`,`parent_qid`,`sid`,`gid`,`type`,`title`,`question`,`preg`,`help`,`other`,`mandatory`,`question_order`,`language`,`scale_id`,`same_default`,`relevance`,`modulename`) VALUES
 ('1', '0', '181911', '1', 'T', 'q1', 'What\'s your name', '', '', 'N', 'N', '1', 'it', '0', '0', '1', NULL),
-('2', '0', '297751', '2', 'S', 'q1', 'What\'s your name?', '', '', 'N', 'N', '1', 'it', '0', '0', '1', NULL);
+('2', '0', '297751', '2', 'S', 'q1', 'What\'s your name?', '', '', 'N', 'N', '1', 'it', '0', '0', '1', NULL),
+('3', '0', '195163', '3', '|', 'upload', 'Please select the file to upload', '', '', 'N', 'N', '1', 'it', '0', '0', '1', '');
 
 
 -- --------------------------------------------------------
@@ -689,18 +701,32 @@ CREATE TABLE `lime_sessions` (
 --
 
 INSERT INTO `lime_sessions` (`id`,`expire`,`data`) VALUES
-('gstsbwijhwxzvcxq2rsgcg78uwkn75km', '1528457826', 'admin'),
-('iau3qraxhhztw95adttrxw55rzz73bpq', '1528458010', 'admin'),
-('cx4zemkmjwra9cae68zkff8t5zyxrhs4', '1528458033', 'admin'),
-('ps4gyi7u2icsjn5zdxg6brean322xy5z', '1528458264', 'admin'),
-('j68r5i2hdjef6tcmi3nzvc3kh8njw7ww', '1528458325', 'admin'),
-('rdqw869x6bupwwhqnxew27i5izh3bjtm', '1528458393', 'admin'),
-('4srg9epyxha9pigufsb6c9fbmdhwargt', '1528458438', 'admin'),
-('zce8dkd3i7d3a5xgzky56nw3wni2k2es', '1528458453', 'admin'),
-('a3kx847n7bei3bpe6ktuksepx9bk747h', '1528458473', 'admin'),
-('pvcuip9epqqrd3anw2htesbm78ci34mk', '1528458584', 'admin'),
-('qj89mga9ttekjutx6nbvgir7k2jfu2ju', '1528458594', 'admin'),
-('aqmpbhtfxv39jfndbn9efq7tzbcwxufw', '1528458608', 'admin');
+('rhz9fuhmhb2j6vji4c9s7yviz6dteecu', '1528537926', 'admin'),
+('jswfnex6j9dvgbjmutv6fm2am8mk8nu9', '1528537687', 'admin'),
+('q6ng569pygahfqpvwijta4gccf9y28cg', '1528537681', 'admin'),
+('q4mgbmbrv7rqh38hw2uqedbermiuvjxd', '1528537661', 'admin'),
+('kgyc6x2juyj6esaksyrh7eh4t72k3u5q', '1528537497', 'admin'),
+('k6dwcjk7yq8yqqambbc58zqck46ih6tw', '1528537473', 'admin'),
+('tuavrmrn5zvumwg4nvayx9j2bd6djx8s', '1528537333', 'admin'),
+('hk87xi9ismsduie7vwuasgreseb2ti72', '1528537305', 'admin'),
+('wzhgwak8t8cgrymub4zfkv8gp3rf7tq2', '1528535693', 'admin'),
+('w3j7h3x7n76ht88m6bcmcay9zmttbnnp', '1528535672', 'admin'),
+('kvh594dts2ekiu58uyg6gughz4easbww', '1528535655', 'admin'),
+('e4y4nw6t4uu8uf38zzjyz32cr2p2seri', '1528535623', 'admin'),
+('bryg9mr4nfp287fqave4q4h4hrmnntvk', '1528534864', 'admin'),
+('cs7k38hmutw9tbsfj7nrazkst4r4yjha', '1528537955', 'admin'),
+('bjakt2m3ru8nhayzbftg5nct7a4tzqb6', '1528537971', 'admin'),
+('3zqpgws792hjrzmixk8j9acuxk3wx97s', '1528538012', 'admin'),
+('8aj6dv8jbavcqwzhzaw35fepedhp3w22', '1528538023', 'admin'),
+('cjzay8h69bjruas3h7i3ggdkmcqv6744', '1528538094', 'admin'),
+('uyhimq8e4v223a7ceuz4t3jpkgr6dfqn', '1528538104', 'admin'),
+('zf8kdkph5vijnmceru2ueak8bpdymbn2', '1528538113', 'admin'),
+('rf873e8ihw9mb5hiqmydu4fgh6dt7aku', '1528538168', 'admin'),
+('5h3ew5ddg8xvu9zuyde42z9pn78mg5wr', '1528538197', 'admin'),
+('w3kkm3iakd3y656cbvvj3hacbcqkbbzs', '1528538228', 'admin'),
+('t77huaqk3k4gmqwaissk5te8j9ijaff6', '1528538256', 'admin'),
+('tc5nh9av4m9gydmwv7nakb5x2h97haqc', '1528538294', 'admin'),
+('rhym3eshci64dwfxf4a9eet8vprutgwn', '1528538437', 'admin');
 
 
 -- --------------------------------------------------------
@@ -776,14 +802,16 @@ INSERT INTO `lime_settings_global` (`stg_name`,`stg_value`) VALUES
 ('sideMenuBehaviour', 'adaptive'),
 ('timeadjust', '+0 minutes'),
 ('usercontrolSameGroupPolicy', '1'),
-('last_survey_1', '297751'),
-('last_question_1', '2'),
-('last_question_sid_1', '297751'),
-('last_question_gid_1', '2'),
+('last_survey_1', '195163'),
+('last_question_1', '3'),
+('last_question_sid_1', '195163'),
+('last_question_gid_1', '3'),
 ('last_question_1_181911', '1'),
 ('last_question_1_181911_gid', '1'),
 ('last_question_1_297751', '2'),
-('last_question_1_297751_gid', '2');
+('last_question_1_297751_gid', '2'),
+('last_question_1_195163', '3'),
+('last_question_1_195163_gid', '3');
 
 
 -- --------------------------------------------------------
@@ -810,6 +838,36 @@ CREATE TABLE `lime_survey_181911` (
 
 INSERT INTO `lime_survey_181911` (`id`,`token`,`submitdate`,`lastpage`,`startlanguage`,`181911X1X1`) VALUES
 ('1', NULL, '1980-01-01 00:00:00', '1', 'it', 'Andrea');
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lime_survey_195163`
+--
+
+DROP TABLE IF EXISTS `lime_survey_195163`;
+CREATE TABLE `lime_survey_195163` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `submitdate` datetime DEFAULT NULL,
+  `lastpage` int(11) DEFAULT NULL,
+  `startlanguage` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `startdate` datetime NOT NULL,
+  `datestamp` datetime NOT NULL,
+  `ipaddr` text COLLATE utf8mb4_unicode_ci,
+  `195163X3X3` text COLLATE utf8mb4_unicode_ci,
+  `195163X3X3_filecount` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_survey_token_195163_5261` (`token`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lime_survey_195163`
+--
+
+INSERT INTO `lime_survey_195163` (`id`,`token`,`submitdate`,`lastpage`,`startlanguage`,`startdate`,`datestamp`,`ipaddr`,`195163X3X3`,`195163X3X3_filecount`) VALUES
+('3', 'BEPO0cWntRACXNn', '2018-06-09 07:36:31', '1', 'it', '2018-06-09 07:36:16', '2018-06-09 07:36:31', '172.20.0.1', '[{ \"title\":\"Foo Bar\",\"comment\":\"This is a comment\",\"size\":\"0.009\",\"name\":\"foo.txt\",\"filename\":\"fu_6mxy5g9h9fgm4gt\",\"ext\":\"txt\" }]', '1');
 
 
 -- --------------------------------------------------------
@@ -953,7 +1011,8 @@ CREATE TABLE `lime_surveys` (
 
 INSERT INTO `lime_surveys` (`sid`,`owner_id`,`admin`,`active`,`expires`,`startdate`,`adminemail`,`anonymized`,`faxto`,`format`,`savetimings`,`template`,`language`,`additional_languages`,`datestamp`,`usecookie`,`allowregister`,`allowsave`,`autonumber_start`,`autoredirect`,`allowprev`,`printanswers`,`ipaddr`,`refurl`,`datecreated`,`publicstatistics`,`publicgraphs`,`listpublic`,`htmlemail`,`sendconfirmation`,`tokenanswerspersistence`,`assessments`,`usecaptcha`,`usetokens`,`bounce_email`,`attributedescriptions`,`emailresponseto`,`emailnotificationto`,`tokenlength`,`showxquestions`,`showgroupinfo`,`shownoanswer`,`showqnumcode`,`bouncetime`,`bounceprocessing`,`bounceaccounttype`,`bounceaccounthost`,`bounceaccountpass`,`bounceaccountencryption`,`bounceaccountuser`,`showwelcome`,`showprogress`,`questionindex`,`navigationdelay`,`nokeyboard`,`alloweditaftercompletion`,`googleanalyticsstyle`,`googleanalyticsapikey`) VALUES
 ('181911', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'N', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'N', 'N', '2018-06-08', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', NULL, '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL),
-('297751', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'N', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'N', 'N', '2018-06-08', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', '{\"attribute_1\":{\"description\":\"\",\"mandatory\":\"Y\",\"show_register\":\"N\",\"cpdbmap\":\"\"},\"attribute_2\":{\"description\":\"\",\"mandatory\":\"Y\",\"show_register\":\"N\",\"cpdbmap\":\"\"}}', '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL);
+('297751', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'N', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'N', 'N', '2018-06-08', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', '{\"attribute_1\":{\"description\":\"\",\"mandatory\":\"Y\",\"show_register\":\"N\",\"cpdbmap\":\"\"},\"attribute_2\":{\"description\":\"\",\"mandatory\":\"Y\",\"show_register\":\"N\",\"cpdbmap\":\"\"}}', '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL),
+('195163', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'Y', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'Y', 'N', '2018-06-09', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', NULL, '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL);
 
 
 -- --------------------------------------------------------
@@ -996,8 +1055,9 @@ CREATE TABLE `lime_surveys_languagesettings` (
 --
 
 INSERT INTO `lime_surveys_languagesettings` (`surveyls_survey_id`,`surveyls_language`,`surveyls_title`,`surveyls_description`,`surveyls_welcometext`,`surveyls_endtext`,`surveyls_url`,`surveyls_urldescription`,`surveyls_email_invite_subj`,`surveyls_email_invite`,`surveyls_email_remind_subj`,`surveyls_email_remind`,`surveyls_email_register_subj`,`surveyls_email_register`,`surveyls_email_confirm_subj`,`surveyls_email_confirm`,`surveyls_dateformat`,`surveyls_attributecaptions`,`email_admin_notification_subj`,`email_admin_notification`,`email_admin_responses_subj`,`email_admin_responses`,`surveyls_numberformat`,`attachments`) VALUES
-('181911', 'it', 'TestSurvey', '', '', '', '', '', 'Invito per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nè invitato a partecipare ad un\'indagine on line.<br />\n<br />\nL\'indagine è intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare click sul link in basso.<br />\n<br />\nCordiali saluti,{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare click qui per accedere al questionario e rispondere alle domande relative:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si può cliccare sul seguente collegamento:<br />\n{OPTOUTURL}<br />\n<br />\nSe è presente in blacklist ma vuole partecipare a questa indagine e ricevere inviti, vada al seguente link:<br />\n{OPTINURL}', 'Promemoria per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\nRecentemente ha ricevuto un invito a partecipare ad un\'indagine on line.<br />\n<br />\nAbbiamo notato che non ha ancora completato il questionario. Con l\'occasione Le ricordiamo che il questionario è ancora disponibile.<br />\n<br />\nL\'indagine è intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare clic sul link qui sotto.<br />\n<br />\nCordiali saluti,<br />\n<br />\n{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare clic qui per accedere all\'indagine e rispondere al questionario:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si può cliccare sul seguente collegamento:<br />\n{OPTOUTURL}', 'Conferma di registrazione all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nLei (o qualcuno che ha utilizzato il suo indirizzo e-mail) si è registrato per partecipare all\'indagine on line intitolata {SURVEYNAME}.<br />\n<br />\nPer completare il questionario fare clic sul seguente indirizzo:<br />\n<br />\n{SURVEYURL}<br />\n<br />\nSe ha qualche domanda, o se non si è registrato e ritiene che questa e-mail ti sia pervenuta per errore, la preghiamo di contattare  {ADMINNAME} all\'indirizzo {ADMINEMAIL}.', 'Confermare la partecipazione all&#039;indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nQuesta e-mail le è stata inviata per confermarle che ha completato correttamente il questionario intitolato {SURVEYNAME}  e che le sue risposte sono state salvate. Grazie per la partecipazione.<br />\n<br />\nSe ha ulteriori domande circa questo messaggio, la prego di contattare {ADMINNAME} all\'indirizzo e-mail {ADMINEMAIL}.<br />\n<br />\nCordiali saluti<br />\n<br />\n{ADMINNAME}', '5', NULL, 'Invio di una risposta all\'indagine {SURVEYNAME}', 'Salve,<br />\n<br />\nUna nuova risposta é stata inviata per l\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare click sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare click sul link seguente per vedere le risposte individuali:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare click sul link seguente per modificare le risposte individuali:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}', 'Invio di una risposta all\'indagine {SURVEYNAME} con risultati', 'Salve,<br />\n<br />\nUna nuova risposta è stata inviata dall\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare clic sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare clic sul link seguente per vedere la risposta individuale:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per modificare la risposta individuale:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}<br />\n<br />\n<br />\nLe seguenti risposte sono state date dal partecipante:<br />\n{ANSWERTABLE}', '1', NULL),
-('297751', 'it', 'TestSurvey with Participants', '', '', '', '', '', 'Invito per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nè invitato a partecipare ad un\'indagine on line.<br />\n<br />\nL\'indagine è intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare click sul link in basso.<br />\n<br />\nCordiali saluti,{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare click qui per accedere al questionario e rispondere alle domande relative:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si può cliccare sul seguente collegamento:<br />\n{OPTOUTURL}<br />\n<br />\nSe è presente in blacklist ma vuole partecipare a questa indagine e ricevere inviti, vada al seguente link:<br />\n{OPTINURL}', 'Promemoria per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\nRecentemente ha ricevuto un invito a partecipare ad un\'indagine on line.<br />\n<br />\nAbbiamo notato che non ha ancora completato il questionario. Con l\'occasione Le ricordiamo che il questionario è ancora disponibile.<br />\n<br />\nL\'indagine è intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare clic sul link qui sotto.<br />\n<br />\nCordiali saluti,<br />\n<br />\n{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare clic qui per accedere all\'indagine e rispondere al questionario:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si può cliccare sul seguente collegamento:<br />\n{OPTOUTURL}', 'Conferma di registrazione all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nLei (o qualcuno che ha utilizzato il suo indirizzo e-mail) si è registrato per partecipare all\'indagine on line intitolata {SURVEYNAME}.<br />\n<br />\nPer completare il questionario fare clic sul seguente indirizzo:<br />\n<br />\n{SURVEYURL}<br />\n<br />\nSe ha qualche domanda, o se non si è registrato e ritiene che questa e-mail ti sia pervenuta per errore, la preghiamo di contattare  {ADMINNAME} all\'indirizzo {ADMINEMAIL}.', 'Confermare la partecipazione all&#039;indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nQuesta e-mail le è stata inviata per confermarle che ha completato correttamente il questionario intitolato {SURVEYNAME}  e che le sue risposte sono state salvate. Grazie per la partecipazione.<br />\n<br />\nSe ha ulteriori domande circa questo messaggio, la prego di contattare {ADMINNAME} all\'indirizzo e-mail {ADMINEMAIL}.<br />\n<br />\nCordiali saluti<br />\n<br />\n{ADMINNAME}', '5', '{\"attribute_1\":\"\",\"attribute_2\":\"\"}', 'Invio di una risposta all\'indagine {SURVEYNAME}', 'Salve,<br />\n<br />\nUna nuova risposta é stata inviata per l\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare click sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare click sul link seguente per vedere le risposte individuali:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare click sul link seguente per modificare le risposte individuali:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}', 'Invio di una risposta all\'indagine {SURVEYNAME} con risultati', 'Salve,<br />\n<br />\nUna nuova risposta è stata inviata dall\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare clic sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare clic sul link seguente per vedere la risposta individuale:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per modificare la risposta individuale:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}<br />\n<br />\n<br />\nLe seguenti risposte sono state date dal partecipante:<br />\n{ANSWERTABLE}', '1', NULL);
+('181911', 'it', 'TestSurvey', '', '', '', '', '', 'Invito per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nÃ¨ invitato a partecipare ad un\'indagine on line.<br />\n<br />\nL\'indagine Ã¨ intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare click sul link in basso.<br />\n<br />\nCordiali saluti,{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare click qui per accedere al questionario e rispondere alle domande relative:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si puÃ² cliccare sul seguente collegamento:<br />\n{OPTOUTURL}<br />\n<br />\nSe Ã¨ presente in blacklist ma vuole partecipare a questa indagine e ricevere inviti, vada al seguente link:<br />\n{OPTINURL}', 'Promemoria per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\nRecentemente ha ricevuto un invito a partecipare ad un\'indagine on line.<br />\n<br />\nAbbiamo notato che non ha ancora completato il questionario. Con l\'occasione Le ricordiamo che il questionario Ã¨ ancora disponibile.<br />\n<br />\nL\'indagine Ã¨ intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare clic sul link qui sotto.<br />\n<br />\nCordiali saluti,<br />\n<br />\n{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare clic qui per accedere all\'indagine e rispondere al questionario:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si puÃ² cliccare sul seguente collegamento:<br />\n{OPTOUTURL}', 'Conferma di registrazione all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nLei (o qualcuno che ha utilizzato il suo indirizzo e-mail) si Ã¨ registrato per partecipare all\'indagine on line intitolata {SURVEYNAME}.<br />\n<br />\nPer completare il questionario fare clic sul seguente indirizzo:<br />\n<br />\n{SURVEYURL}<br />\n<br />\nSe ha qualche domanda, o se non si Ã¨ registrato e ritiene che questa e-mail ti sia pervenuta per errore, la preghiamo di contattare  {ADMINNAME} all\'indirizzo {ADMINEMAIL}.', 'Confermare la partecipazione all&#039;indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nQuesta e-mail le Ã¨ stata inviata per confermarle che ha completato correttamente il questionario intitolato {SURVEYNAME}  e che le sue risposte sono state salvate. Grazie per la partecipazione.<br />\n<br />\nSe ha ulteriori domande circa questo messaggio, la prego di contattare {ADMINNAME} all\'indirizzo e-mail {ADMINEMAIL}.<br />\n<br />\nCordiali saluti<br />\n<br />\n{ADMINNAME}', '5', NULL, 'Invio di una risposta all\'indagine {SURVEYNAME}', 'Salve,<br />\n<br />\nUna nuova risposta Ã© stata inviata per l\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare click sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare click sul link seguente per vedere le risposte individuali:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare click sul link seguente per modificare le risposte individuali:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}', 'Invio di una risposta all\'indagine {SURVEYNAME} con risultati', 'Salve,<br />\n<br />\nUna nuova risposta Ã¨ stata inviata dall\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare clic sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare clic sul link seguente per vedere la risposta individuale:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per modificare la risposta individuale:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}<br />\n<br />\n<br />\nLe seguenti risposte sono state date dal partecipante:<br />\n{ANSWERTABLE}', '1', NULL),
+('297751', 'it', 'TestSurvey with Participants', '', '', '', '', '', 'Invito per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nÃ¨ invitato a partecipare ad un\'indagine on line.<br />\n<br />\nL\'indagine Ã¨ intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare click sul link in basso.<br />\n<br />\nCordiali saluti,{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare click qui per accedere al questionario e rispondere alle domande relative:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si puÃ² cliccare sul seguente collegamento:<br />\n{OPTOUTURL}<br />\n<br />\nSe Ã¨ presente in blacklist ma vuole partecipare a questa indagine e ricevere inviti, vada al seguente link:<br />\n{OPTINURL}', 'Promemoria per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\nRecentemente ha ricevuto un invito a partecipare ad un\'indagine on line.<br />\n<br />\nAbbiamo notato che non ha ancora completato il questionario. Con l\'occasione Le ricordiamo che il questionario Ã¨ ancora disponibile.<br />\n<br />\nL\'indagine Ã¨ intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare clic sul link qui sotto.<br />\n<br />\nCordiali saluti,<br />\n<br />\n{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare clic qui per accedere all\'indagine e rispondere al questionario:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si puÃ² cliccare sul seguente collegamento:<br />\n{OPTOUTURL}', 'Conferma di registrazione all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nLei (o qualcuno che ha utilizzato il suo indirizzo e-mail) si Ã¨ registrato per partecipare all\'indagine on line intitolata {SURVEYNAME}.<br />\n<br />\nPer completare il questionario fare clic sul seguente indirizzo:<br />\n<br />\n{SURVEYURL}<br />\n<br />\nSe ha qualche domanda, o se non si Ã¨ registrato e ritiene che questa e-mail ti sia pervenuta per errore, la preghiamo di contattare  {ADMINNAME} all\'indirizzo {ADMINEMAIL}.', 'Confermare la partecipazione all&#039;indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nQuesta e-mail le Ã¨ stata inviata per confermarle che ha completato correttamente il questionario intitolato {SURVEYNAME}  e che le sue risposte sono state salvate. Grazie per la partecipazione.<br />\n<br />\nSe ha ulteriori domande circa questo messaggio, la prego di contattare {ADMINNAME} all\'indirizzo e-mail {ADMINEMAIL}.<br />\n<br />\nCordiali saluti<br />\n<br />\n{ADMINNAME}', '5', '{\"attribute_1\":\"\",\"attribute_2\":\"\"}', 'Invio di una risposta all\'indagine {SURVEYNAME}', 'Salve,<br />\n<br />\nUna nuova risposta Ã© stata inviata per l\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare click sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare click sul link seguente per vedere le risposte individuali:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare click sul link seguente per modificare le risposte individuali:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}', 'Invio di una risposta all\'indagine {SURVEYNAME} con risultati', 'Salve,<br />\n<br />\nUna nuova risposta Ã¨ stata inviata dall\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare clic sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare clic sul link seguente per vedere la risposta individuale:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per modificare la risposta individuale:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}<br />\n<br />\n<br />\nLe seguenti risposte sono state date dal partecipante:<br />\n{ANSWERTABLE}', '1', NULL),
+('195163', 'it', 'TestSurvey with files', '', '', '', '', '', 'Invito per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nè invitato a partecipare ad un\'indagine on line.<br />\n<br />\nL\'indagine è intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare click sul link in basso.<br />\n<br />\nCordiali saluti,{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare click qui per accedere al questionario e rispondere alle domande relative:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si può cliccare sul seguente collegamento:<br />\n{OPTOUTURL}<br />\n<br />\nSe è presente in blacklist ma vuole partecipare a questa indagine e ricevere inviti, vada al seguente link:<br />\n{OPTINURL}', 'Promemoria per partecipare all\'indagine', 'Egregio/a {FIRSTNAME},<br />\nRecentemente ha ricevuto un invito a partecipare ad un\'indagine on line.<br />\n<br />\nAbbiamo notato che non ha ancora completato il questionario. Con l\'occasione Le ricordiamo che il questionario è ancora disponibile.<br />\n<br />\nL\'indagine è intitolata:<br />\n\"{SURVEYNAME}\"<br />\n<br />\n\"{SURVEYDESCRIPTION}\"<br />\n<br />\nPer partecipare fare clic sul link qui sotto.<br />\n<br />\nCordiali saluti,<br />\n<br />\n{ADMINNAME} ({ADMINEMAIL})<br />\n<br />\n----------------------------------------------<br />\nFare clic qui per accedere all\'indagine e rispondere al questionario:<br />\n{SURVEYURL}<br />\n<br />\nSe non si intende partecipare a questa indagine e non si vogliono ricevere altri inviti, si può cliccare sul seguente collegamento:<br />\n{OPTOUTURL}', 'Conferma di registrazione all\'indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nLei (o qualcuno che ha utilizzato il suo indirizzo e-mail) si è registrato per partecipare all\'indagine on line intitolata {SURVEYNAME}.<br />\n<br />\nPer completare il questionario fare clic sul seguente indirizzo:<br />\n<br />\n{SURVEYURL}<br />\n<br />\nSe ha qualche domanda, o se non si è registrato e ritiene che questa e-mail ti sia pervenuta per errore, la preghiamo di contattare  {ADMINNAME} all\'indirizzo {ADMINEMAIL}.', 'Confermare la partecipazione all&#039;indagine', 'Egregio/a {FIRSTNAME},<br />\n<br />\nQuesta e-mail le è stata inviata per confermarle che ha completato correttamente il questionario intitolato {SURVEYNAME}  e che le sue risposte sono state salvate. Grazie per la partecipazione.<br />\n<br />\nSe ha ulteriori domande circa questo messaggio, la prego di contattare {ADMINNAME} all\'indirizzo e-mail {ADMINEMAIL}.<br />\n<br />\nCordiali saluti<br />\n<br />\n{ADMINNAME}', '5', NULL, 'Invio di una risposta all\'indagine {SURVEYNAME}', 'Salve,<br />\n<br />\nUna nuova risposta é stata inviata per l\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare click sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare click sul link seguente per vedere le risposte individuali:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare click sul link seguente per modificare le risposte individuali:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}', 'Invio di una risposta all\'indagine {SURVEYNAME} con risultati', 'Salve,<br />\n<br />\nUna nuova risposta è stata inviata dall\'indagine \'{SURVEYNAME}\'.<br />\n<br />\nFare clic sul link seguente per ricaricare l\'indagine:<br />\n{RELOADURL}<br />\n<br />\nFare clic sul link seguente per vedere la risposta individuale:<br />\n{VIEWRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per modificare la risposta individuale:<br />\n{EDITRESPONSEURL}<br />\n<br />\nFare clic sul link seguente per visualizzare le statistiche:<br />\n{STATISTICSURL}<br />\n<br />\n<br />\nLe seguenti risposte sono state date dal partecipante:<br />\n{ANSWERTABLE}', '1', NULL);
 
 
 -- --------------------------------------------------------
@@ -1016,6 +1076,43 @@ CREATE TABLE `lime_templates` (
 --
 -- Dumping data for table `lime_templates`
 --
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lime_tokens_195163`
+--
+
+DROP TABLE IF EXISTS `lime_tokens_195163`;
+CREATE TABLE `lime_tokens_195163` (
+  `tid` int(11) NOT NULL AUTO_INCREMENT,
+  `participant_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `firstname` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `lastname` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` text COLLATE utf8mb4_unicode_ci,
+  `emailstatus` text COLLATE utf8mb4_unicode_ci,
+  `token` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `language` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `blacklisted` varchar(17) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sent` varchar(17) COLLATE utf8mb4_unicode_ci DEFAULT 'N',
+  `remindersent` varchar(17) COLLATE utf8mb4_unicode_ci DEFAULT 'N',
+  `remindercount` int(11) DEFAULT '0',
+  `completed` varchar(17) COLLATE utf8mb4_unicode_ci DEFAULT 'N',
+  `usesleft` int(11) DEFAULT '1',
+  `validfrom` datetime DEFAULT NULL,
+  `validuntil` datetime DEFAULT NULL,
+  `mpid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`tid`),
+  KEY `idx_token_token_195163_46315` (`token`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lime_tokens_195163`
+--
+
+INSERT INTO `lime_tokens_195163` (`tid`,`participant_id`,`firstname`,`lastname`,`email`,`emailstatus`,`token`,`language`,`blacklisted`,`sent`,`remindersent`,`remindercount`,`completed`,`usesleft`,`validfrom`,`validuntil`,`mpid`) VALUES
+('1', NULL, 'John', 'Doe', '', 'OK', 'BEPO0cWntRACXNn', 'it', NULL, 'N', 'N', '0', '2018-06-09 07:36', '0', NULL, NULL, NULL);
 
 
 -- --------------------------------------------------------
@@ -1128,5 +1225,5 @@ CREATE TABLE `lime_users` (
 --
 
 INSERT INTO `lime_users` (`uid`,`users_name`,`password`,`full_name`,`parent_id`,`lang`,`email`,`htmleditormode`,`templateeditormode`,`questionselectormode`,`one_time_pw`,`dateformat`,`created`,`modified`) VALUES
-('1', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Administrator', '0', 'it', 'your-email@example.net', 'default', 'default', 'default', NULL, '1', '2018-06-08 09:35:07', NULL);
+('1', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Administrator', '0', 'it', 'your-email@example.net', 'default', 'default', 'default', NULL, '1', '2018-06-08 09:35:07', '2018-06-09 07:03:18');
 

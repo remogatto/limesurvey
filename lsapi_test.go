@@ -3,6 +3,7 @@ package limesurvey
 import (
 	"encoding/base64"
 	"encoding/csv"
+	"os"
 	"strings"
 	"testing"
 
@@ -30,7 +31,7 @@ func TestRunner(t *testing.T) {
 func (t *testSuite) BeforeAll() {
 	var err error
 
-	url = "http://localhost:8080/index.php/admin/remotecontrol"
+	url = "http://localhost:18080/index.php/admin/remotecontrol"
 	username = "admin"
 	password = "admin"
 
@@ -92,4 +93,35 @@ func (t *testSuite) TestSetSurveyProperties() {
 		map[string]interface{}{"expires": nil})
 	t.Nil(err)
 	t.True(result["expires"].(bool))
+}
+
+func (t *testSuite) TestGetUploadedFiles() {
+	ps, err := api.ListParticipants(195163, 0, 1, false)
+	t.Nil(err)
+
+	for token, _ := range ps {
+		result, err := api.GetUploadedFiles(195163, token)
+		t.Nil(err)
+		for _, f := range result {
+			filename := f.(map[string]interface{})["meta"].(map[string]interface{})["name"].(string)
+			content := f.(map[string]interface{})["content"].(string)
+			dec, err := base64.StdEncoding.DecodeString(content)
+			if err != nil {
+				panic(err)
+			}
+
+			f, err := os.Create(filename)
+			if err != nil {
+				panic(err)
+			}
+			defer f.Close()
+
+			if _, err := f.Write(dec); err != nil {
+				panic(err)
+			}
+			if err := f.Sync(); err != nil {
+				panic(err)
+			}
+		}
+	}
 }

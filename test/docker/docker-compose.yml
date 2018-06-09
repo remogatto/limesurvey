@@ -2,11 +2,21 @@ version: "3"
 
 services:
 
-  limesurvey_test:
+  remogatto_limesurvey_test:
     restart: always
     image: crramirez/limesurvey:latest
-    container_name: limesurvey_test
+    container_name: remogatto_limesurvey_test
     ports:
-      - 8080:80
-    links:
-      - mysql
+      - 18080:80
+      
+  remogatto_mysql_test:
+    image: mysql
+    container_name: remogatto_mysql_test
+#    volumes:
+#      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - 13306:3306
+
+    

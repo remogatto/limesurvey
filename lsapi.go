@@ -32,6 +32,11 @@ type Participant struct {
 	Attributes map[string]interface{}
 }
 
+type UploadedFile struct {
+	Filename string
+	Content  string // Base64 encoded
+}
+
 type LSAPI struct {
 	Url        string
 	SessionKey string
@@ -182,5 +187,21 @@ func (api *LSAPI) SetSurveyProperties(surveyID int, properties ...interface{}) (
 		return nil, err
 	}
 
+	return result.Result.(map[string]interface{}), nil
+}
+
+func (api *LSAPI) GetUploadedFiles(surveyID int, sToken string) (map[string]interface{}, error) {
+	cmd := &Command{
+		Method: "get_uploaded_files",
+		Params: []interface{}{
+			api.SessionKey,
+			surveyID,
+			sToken,
+		},
+	}
+	result, err := cmd.Execute(api.Url)
+	if err != nil {
+		return nil, err
+	}
 	return result.Result.(map[string]interface{}), nil
 }
