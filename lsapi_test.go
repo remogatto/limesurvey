@@ -3,7 +3,6 @@ package limesurvey
 import (
 	"encoding/base64"
 	"encoding/csv"
-	"os"
 	"strings"
 	"testing"
 
@@ -101,29 +100,10 @@ func (t *testSuite) TestGetUploadedFiles() {
 
 	for token, _ := range ps {
 
-		result, err := api.GetUploadedFiles(195163, token)
+		files, err := api.GetUploadedFiles(195163, token)
 		t.Nil(err)
 
-		for _, f := range result {
-			filename := f.(map[string]interface{})["meta"].(map[string]interface{})["name"].(string)
-			content := f.(map[string]interface{})["content"].(string)
-			dec, err := base64.StdEncoding.DecodeString(content)
-			if err != nil {
-				panic(err)
-			}
-
-			f, err := os.Create(filename)
-			if err != nil {
-				panic(err)
-			}
-			defer f.Close()
-
-			if _, err := f.Write(dec); err != nil {
-				panic(err)
-			}
-			if err := f.Sync(); err != nil {
-				panic(err)
-			}
-		}
+		t.Equal("foo.txt", files[0].Filename)
+		t.Equal("Foo Bar\n", string(files[0].Content))
 	}
 }

@@ -2,6 +2,7 @@ package limesurvey
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -34,7 +35,7 @@ type Participant struct {
 
 type UploadedFile struct {
 	Filename string
-	Content  string // Base64 encoded
+	Content  []uint8 // Base64 encoded
 }
 
 type LSAPI struct {
@@ -190,7 +191,7 @@ func (api *LSAPI) SetSurveyProperties(surveyID int, properties ...interface{}) (
 	return result.Result.(map[string]interface{}), nil
 }
 
-func (api *LSAPI) GetUploadedFiles(surveyID int, sToken string) (map[string]interface{}, error) {
+func (api *LSAPI) GetUploadedFiles(surveyID int, sToken string) ([]UploadedFile, error) {
 	cmd := &Command{
 		Method: "get_uploaded_files",
 		Params: []interface{}{
@@ -203,5 +204,20 @@ func (api *LSAPI) GetUploadedFiles(surveyID int, sToken string) (map[string]inte
 	if err != nil {
 		return nil, err
 	}
-	return result.Result.(map[string]interface{}), nil
+
+	files := make([]UploadedFile, 0)
+
+	for _, f := range result.Result.(map[string]interface{}) {
+		content := f.(map[string]interface{})["content"].(string)
+		dec, err := base64.StdEncoding.DecodeString(content)
+		if err != nil {
+			return nil, err
+		}
+		files = append(files, UploadedFile{
+			Filename: f.(map[string]interface{})["meta"].(map[string]interface{})["name"].(string),
+			Content:  dec,
+		})
+	}
+
+	return files, nil
 }
