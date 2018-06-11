@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS limesurvey_test;
+CREATE DATABASE limesurvey_test;
+USE limesurvey_test;
+
 -- Only prefixed tables with: lime_
 -- Date of Dump: 09-Jun-2018
 --

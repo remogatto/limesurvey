@@ -100,8 +100,10 @@ func (t *testSuite) TestGetUploadedFiles() {
 	t.Nil(err)
 
 	for token, _ := range ps {
+
 		result, err := api.GetUploadedFiles(195163, token)
 		t.Nil(err)
+
 		for _, f := range result {
 			filename := f.(map[string]interface{})["meta"].(map[string]interface{})["name"].(string)
 			content := f.(map[string]interface{})["content"].(string)
