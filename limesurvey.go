@@ -35,7 +35,7 @@ type Participant struct {
 
 type UploadedFile struct {
 	Filename string
-	Content  []uint8 // Base64 encoded
+	Content  []uint8
 }
 
 type LSAPI struct {
@@ -206,6 +206,10 @@ func (api *LSAPI) GetUploadedFiles(surveyID int, sToken string) ([]UploadedFile,
 	}
 
 	files := make([]UploadedFile, 0)
+
+	if l, ok := result.Result.([]interface{}); ok && len(l) == 0 {
+		return files, nil
+	}
 
 	for _, f := range result.Result.(map[string]interface{}) {
 		content := f.(map[string]interface{})["content"].(string)

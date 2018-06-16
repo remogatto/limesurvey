@@ -1,9 +1,5 @@
-DROP DATABASE IF EXISTS limesurvey_test;
-CREATE DATABASE limesurvey_test;
-USE limesurvey_test;
-
 -- Only prefixed tables with: lime_
--- Date of Dump: 09-Jun-2018
+-- Date of Dump: 16-Jun-2018
 --
 
 -- --------------------------------------------------------
@@ -705,32 +701,14 @@ CREATE TABLE `lime_sessions` (
 --
 
 INSERT INTO `lime_sessions` (`id`,`expire`,`data`) VALUES
-('rhz9fuhmhb2j6vji4c9s7yviz6dteecu', '1528537926', 'admin'),
-('jswfnex6j9dvgbjmutv6fm2am8mk8nu9', '1528537687', 'admin'),
-('q6ng569pygahfqpvwijta4gccf9y28cg', '1528537681', 'admin'),
-('q4mgbmbrv7rqh38hw2uqedbermiuvjxd', '1528537661', 'admin'),
-('kgyc6x2juyj6esaksyrh7eh4t72k3u5q', '1528537497', 'admin'),
-('k6dwcjk7yq8yqqambbc58zqck46ih6tw', '1528537473', 'admin'),
-('tuavrmrn5zvumwg4nvayx9j2bd6djx8s', '1528537333', 'admin'),
-('hk87xi9ismsduie7vwuasgreseb2ti72', '1528537305', 'admin'),
-('wzhgwak8t8cgrymub4zfkv8gp3rf7tq2', '1528535693', 'admin'),
-('w3j7h3x7n76ht88m6bcmcay9zmttbnnp', '1528535672', 'admin'),
-('kvh594dts2ekiu58uyg6gughz4easbww', '1528535655', 'admin'),
-('e4y4nw6t4uu8uf38zzjyz32cr2p2seri', '1528535623', 'admin'),
-('bryg9mr4nfp287fqave4q4h4hrmnntvk', '1528534864', 'admin'),
-('cs7k38hmutw9tbsfj7nrazkst4r4yjha', '1528537955', 'admin'),
-('bjakt2m3ru8nhayzbftg5nct7a4tzqb6', '1528537971', 'admin'),
-('3zqpgws792hjrzmixk8j9acuxk3wx97s', '1528538012', 'admin'),
-('8aj6dv8jbavcqwzhzaw35fepedhp3w22', '1528538023', 'admin'),
-('cjzay8h69bjruas3h7i3ggdkmcqv6744', '1528538094', 'admin'),
-('uyhimq8e4v223a7ceuz4t3jpkgr6dfqn', '1528538104', 'admin'),
-('zf8kdkph5vijnmceru2ueak8bpdymbn2', '1528538113', 'admin'),
-('rf873e8ihw9mb5hiqmydu4fgh6dt7aku', '1528538168', 'admin'),
-('5h3ew5ddg8xvu9zuyde42z9pn78mg5wr', '1528538197', 'admin'),
-('w3kkm3iakd3y656cbvvj3hacbcqkbbzs', '1528538228', 'admin'),
-('t77huaqk3k4gmqwaissk5te8j9ijaff6', '1528538256', 'admin'),
-('tc5nh9av4m9gydmwv7nakb5x2h97haqc', '1528538294', 'admin'),
-('rhym3eshci64dwfxf4a9eet8vprutgwn', '1528538437', 'admin');
+('kxnsaqw8insnchg2g2funymgx5upjhpp', '1529142800', 'admin'),
+('w6trtr2m8hykb23vkhkdbgc262b7ej4d', '1529142976', 'admin'),
+('8ip6svni3fduunvfyq25inux2zh2sct4', '1529143214', 'admin'),
+('34gvkg3zwjjdsjzqg3aparredzr42p8g', '1529143198', 'admin'),
+('4a3jiypufkib46e4nr54fydjnc3p8fx7', '1529143142', 'admin'),
+('bt7qcszvj9caa9ph8zpiigrqnxxx4iwz', '1529143012', 'admin'),
+('jnunnpmghxw6bxmvtcn7vcgdaswig8aw', '1529142987', 'admin'),
+('yjurh5tbntj42jucan2j8ngz22su3da5', '1529142389', 'admin');
 
 
 -- --------------------------------------------------------
@@ -864,13 +842,14 @@ CREATE TABLE `lime_survey_195163` (
   `195163X3X3_filecount` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_survey_token_195163_5261` (`token`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_survey_195163`
 --
 
 INSERT INTO `lime_survey_195163` (`id`,`token`,`submitdate`,`lastpage`,`startlanguage`,`startdate`,`datestamp`,`ipaddr`,`195163X3X3`,`195163X3X3_filecount`) VALUES
+('4', 'xbpuad3b9zN9P2m', '2018-06-16 07:55:58', '1', 'it', '2018-06-16 07:55:54', '2018-06-16 07:55:58', '172.20.0.1', '', '0'),
 ('3', 'BEPO0cWntRACXNn', '2018-06-09 07:36:31', '1', 'it', '2018-06-09 07:36:16', '2018-06-09 07:36:31', '172.20.0.1', '[{ \"title\":\"Foo Bar\",\"comment\":\"This is a comment\",\"size\":\"0.009\",\"name\":\"foo.txt\",\"filename\":\"fu_6mxy5g9h9fgm4gt\",\"ext\":\"txt\" }]', '1');
 
 
@@ -1016,7 +995,7 @@ CREATE TABLE `lime_surveys` (
 INSERT INTO `lime_surveys` (`sid`,`owner_id`,`admin`,`active`,`expires`,`startdate`,`adminemail`,`anonymized`,`faxto`,`format`,`savetimings`,`template`,`language`,`additional_languages`,`datestamp`,`usecookie`,`allowregister`,`allowsave`,`autonumber_start`,`autoredirect`,`allowprev`,`printanswers`,`ipaddr`,`refurl`,`datecreated`,`publicstatistics`,`publicgraphs`,`listpublic`,`htmlemail`,`sendconfirmation`,`tokenanswerspersistence`,`assessments`,`usecaptcha`,`usetokens`,`bounce_email`,`attributedescriptions`,`emailresponseto`,`emailnotificationto`,`tokenlength`,`showxquestions`,`showgroupinfo`,`shownoanswer`,`showqnumcode`,`bouncetime`,`bounceprocessing`,`bounceaccounttype`,`bounceaccounthost`,`bounceaccountpass`,`bounceaccountencryption`,`bounceaccountuser`,`showwelcome`,`showprogress`,`questionindex`,`navigationdelay`,`nokeyboard`,`alloweditaftercompletion`,`googleanalyticsstyle`,`googleanalyticsapikey`) VALUES
 ('181911', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'N', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'N', 'N', '2018-06-08', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', NULL, '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL),
 ('297751', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'N', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'N', 'N', '2018-06-08', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', '{\"attribute_1\":{\"description\":\"\",\"mandatory\":\"Y\",\"show_register\":\"N\",\"cpdbmap\":\"\"},\"attribute_2\":{\"description\":\"\",\"mandatory\":\"Y\",\"show_register\":\"N\",\"cpdbmap\":\"\"}}', '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL),
-('195163', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'G', 'N', 'default', 'it', '', 'Y', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'Y', 'N', '2018-06-09', 'N', 'N', 'N', 'Y', 'Y', 'N', 'N', 'N', 'N', 'your-email@example.net', NULL, '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'N', NULL, NULL);
+('195163', '1', 'Administrator', 'Y', NULL, NULL, 'your-email@example.net', 'N', '', 'A', 'N', 'default', 'it', '', 'Y', 'N', 'N', 'Y', '0', 'N', 'N', 'N', 'Y', 'N', '2018-06-09', 'N', 'N', 'N', 'Y', 'Y', 'Y', 'N', 'N', 'N', 'your-email@example.net', NULL, '', '', '15', 'Y', 'B', 'N', 'X', NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'Y', 'Y', '0', '0', 'N', 'Y', '0', '');
 
 
 -- --------------------------------------------------------
@@ -1109,14 +1088,15 @@ CREATE TABLE `lime_tokens_195163` (
   `mpid` int(11) DEFAULT NULL,
   PRIMARY KEY (`tid`),
   KEY `idx_token_token_195163_46315` (`token`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `lime_tokens_195163`
 --
 
 INSERT INTO `lime_tokens_195163` (`tid`,`participant_id`,`firstname`,`lastname`,`email`,`emailstatus`,`token`,`language`,`blacklisted`,`sent`,`remindersent`,`remindercount`,`completed`,`usesleft`,`validfrom`,`validuntil`,`mpid`) VALUES
-('1', NULL, 'John', 'Doe', '', 'OK', 'BEPO0cWntRACXNn', 'it', NULL, 'N', 'N', '0', '2018-06-09 07:36', '0', NULL, NULL, NULL);
+('1', NULL, 'John', 'Doe', '', 'OK', 'BEPO0cWntRACXNn', 'it', NULL, 'N', 'N', '0', '2018-06-09 07:36', '0', NULL, NULL, NULL),
+('2', NULL, 'Jack', 'London', '', 'OK', 'xbpuad3b9zN9P2m', 'it', NULL, 'N', 'N', '0', '2018-06-16 07:55', '0', NULL, NULL, NULL);
 
 
 -- --------------------------------------------------------

@@ -95,15 +95,15 @@ func (t *testSuite) TestSetSurveyProperties() {
 }
 
 func (t *testSuite) TestGetUploadedFiles() {
-	ps, err := api.ListParticipants(195163, 0, 1, false)
+	ps, err := api.ListParticipants(195163, 0, 2, false)
 	t.Nil(err)
 
 	for token, _ := range ps {
-
 		files, err := api.GetUploadedFiles(195163, token)
-		t.Nil(err)
-
-		t.Equal("foo.txt", files[0].Filename)
-		t.Equal("Foo Bar\n", string(files[0].Content))
+		if len(files) > 0 {
+			t.Nil(err)
+			t.Equal("foo.txt", files[0].Filename)
+			t.Equal("Foo Bar\n", string(files[0].Content))
+		}
 	}
 }
