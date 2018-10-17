@@ -8,6 +8,9 @@ services:
     container_name: remogatto_limesurvey_test
     ports:
       - 3005:80
+    volumes:
+      - ./application:/app/application
+      - /etc/localtime:/etc/localtime:ro
 
   db:
     image: mariadb

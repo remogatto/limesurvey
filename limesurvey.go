@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -30,6 +31,7 @@ type Participant struct {
 	Lastname   string
 	Email      string
 	Token      string
+	TokenID    string
 	Attributes map[string]interface{}
 }
 
@@ -38,7 +40,7 @@ type UploadedFile struct {
 	Content  []uint8
 }
 
-type LSAPI struct {
+type Client struct {
 	Url        string
 	SessionKey string
 }
@@ -85,7 +87,7 @@ func (c *Command) Execute(url string) (*Result, error) {
 	return result, nil
 }
 
-func New(url, username, password string) (*LSAPI, error) {
+func New(url, username, password string) (*Client, error) {
 	getSessionKey := &Command{
 		Method: "get_session_key",
 		Params: []interface{}{username, password},
@@ -94,13 +96,13 @@ func New(url, username, password string) (*LSAPI, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &LSAPI{
+	return &Client{
 		Url:        url,
 		SessionKey: key.Result.(string),
 	}, nil
 }
 
-func (api *LSAPI) ExportResponses(surveyID int, docType string, options ...interface{}) (string, error) {
+func (api *Client) ExportResponses(surveyID int, docType string, options ...interface{}) (string, error) {
 	exportResponses := &Command{
 		Method: "export_responses",
 		Params: append(
@@ -117,7 +119,7 @@ func (api *LSAPI) ExportResponses(surveyID int, docType string, options ...inter
 	return result.Result.(string), nil
 }
 
-func (api *LSAPI) ListParticipants(surveyID int, options ...interface{}) (map[string]*Participant, error) {
+func (api *Client) ListParticipants(surveyID int, options ...interface{}) (map[string]*Participant, error) {
 	cmd := &Command{
 		Method: "list_participants",
 		Params: append(
@@ -137,6 +139,7 @@ func (api *LSAPI) ListParticipants(surveyID int, options ...interface{}) (map[st
 	for _, r := range results {
 		attributes := make(map[string]interface{})
 		token := r.(map[string]interface{})["token"].(string)
+		tokenID := r.(map[string]interface{})["tid"].(string)
 		pInfo := r.(map[string]interface{})["participant_info"]
 		if len(options) > 3 {
 			if v, ok := options[3].([]string); ok {
@@ -152,6 +155,7 @@ func (api *LSAPI) ListParticipants(surveyID int, options ...interface{}) (map[st
 			Lastname:   pInfo.(map[string]interface{})["lastname"].(string),
 			Email:      pInfo.(map[string]interface{})["email"].(string),
 			Token:      token,
+			TokenID:    tokenID,
 			Attributes: attributes,
 		}
 	}
@@ -159,7 +163,56 @@ func (api *LSAPI) ListParticipants(surveyID int, options ...interface{}) (map[st
 	return participants, nil
 }
 
-func (api *LSAPI) GetSurveyProperties(surveyID int) (map[string]interface{}, error) {
+func (api *Client) AddParticipants(surveyID int, participants []map[string]string, options ...interface{}) (map[string]*Participant, error) {
+	cmd := &Command{
+		Method: "add_participants",
+		Params: append(
+			[]interface{}{
+				api.SessionKey,
+				surveyID,
+				participants,
+			}, options...),
+	}
+	result, err := cmd.Execute(api.Url)
+	if err != nil {
+		return nil, err
+	}
+	responseParticipants := make(map[string]*Participant)
+	results := result.Result.([]interface{})
+	for _, r := range results {
+		token := r.(map[string]interface{})["token"].(string)
+		responseParticipants[token] = &Participant{
+			Firstname: r.(map[string]interface{})["firstname"].(string),
+			Lastname:  r.(map[string]interface{})["lastname"].(string),
+			Email:     r.(map[string]interface{})["email"].(string),
+			TokenID:   r.(map[string]interface{})["tid"].(string),
+			Token:     token,
+		}
+	}
+
+	return responseParticipants, nil
+}
+
+func (api *Client) RemoveParticipants(surveyID int, tokens []string, options ...interface{}) error {
+	cmd := &Command{
+		Method: "delete_participants",
+		Params: append(
+			[]interface{}{
+				api.SessionKey,
+				surveyID,
+				tokens,
+			}, options...),
+	}
+	result, err := cmd.Execute(api.Url)
+	log.Println(result)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *Client) GetSurveyProperties(surveyID int) (map[string]interface{}, error) {
 	cmd := &Command{
 		Method: "get_survey_properties",
 		Params: []interface{}{
@@ -174,7 +227,7 @@ func (api *LSAPI) GetSurveyProperties(surveyID int) (map[string]interface{}, err
 	return result.Result.(map[string]interface{}), nil
 }
 
-func (api *LSAPI) SetSurveyProperties(surveyID int, properties ...interface{}) (map[string]interface{}, error) {
+func (api *Client) SetSurveyProperties(surveyID int, properties ...interface{}) (map[string]interface{}, error) {
 	cmd := &Command{
 		Method: "set_survey_properties",
 		Params: append(
@@ -191,7 +244,7 @@ func (api *LSAPI) SetSurveyProperties(surveyID int, properties ...interface{}) (
 	return result.Result.(map[string]interface{}), nil
 }
 
-func (api *LSAPI) GetUploadedFiles(surveyID int, sToken string) ([]UploadedFile, error) {
+func (api *Client) GetUploadedFiles(surveyID int, sToken string) ([]UploadedFile, error) {
 	cmd := &Command{
 		Method: "get_uploaded_files",
 		Params: []interface{}{
