@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+
+  app:
+    restart: always
+    image: crramirez/limesurvey:latest
+    container_name: remogatto_limesurvey_test
+    ports:
+      - 3005:80
+
+  db:
+    image: mariadb
+    container_name: remogatto_limesurvey_db_test
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    env_file:
+      - db.env
+      
+volumes:
+  db:
+
+#   remogatto_mysql_test:
+#     image: mysql
+#     container_name: remogatto_mysql_test
+# #    volumes:
+# #      - ./mysql:/var/lib/mysql
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=password
+#     ports:
+#       - 13306:3306
+
+    
