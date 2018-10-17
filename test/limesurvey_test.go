@@ -103,6 +103,25 @@ func (t *testSuite) TestAddRemoveParticipants() {
 	ps, err = client.ListParticipants(297751, 0, 10, false)
 	t.Equal(2, len(ps))
 
+	// Test returned error
+	err = client.RemoveParticipants(297751, []string{"4", "5"})
+	t.Not(t.Nil(err))
+
+}
+
+func (t *testSuite) TestInviteParticipants() {
+	ps, err := client.AddParticipants(297751, []map[string]string{
+		map[string]string{
+			"firstname":   "James",
+			"lastname":    "Bond",
+			"email":       "james.bond@foo.org",
+			"attribute_1": "Foo 5",
+			"attribute_2": "Foo 6",
+		},
+	})
+
+	err := client.InviteParticipants(297751, []string{"3"})
+	t.Nil(err)
 }
 
 func (t *testSuite) TestGetSurveyProperties() {

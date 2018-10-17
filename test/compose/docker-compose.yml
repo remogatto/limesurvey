@@ -9,7 +9,7 @@ services:
     ports:
       - 3005:80
     volumes:
-      - ./application:/app/application
+      - ./config:/app/application/config
       - /etc/localtime:/etc/localtime:ro
 
   db:
@@ -26,15 +26,5 @@ services:
       
 volumes:
   db:
-
-#   remogatto_mysql_test:
-#     image: mysql
-#     container_name: remogatto_mysql_test
-# #    volumes:
-# #      - ./mysql:/var/lib/mysql
-#     environment:
-#       - MYSQL_ROOT_PASSWORD=password
-#     ports:
-#       - 13306:3306
 
     

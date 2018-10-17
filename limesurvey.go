@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 var (
@@ -76,7 +77,7 @@ func (c *Command) Execute(url string) (*Result, error) {
 	if m, ok := result.Result.(map[string]interface{}); ok {
 		if m["status"] != nil {
 			if errMsg := m["status"].(string); errMsg != "" {
-				return nil, fmt.Errorf("%s", result.Error)
+				return nil, fmt.Errorf("%s", errMsg)
 			}
 		}
 
@@ -193,20 +194,57 @@ func (api *Client) AddParticipants(surveyID int, participants []map[string]strin
 	return responseParticipants, nil
 }
 
-func (api *Client) RemoveParticipants(surveyID int, tokens []string, options ...interface{}) error {
+func (api *Client) RemoveParticipants(surveyID int, tIds []string, options ...interface{}) error {
 	cmd := &Command{
 		Method: "delete_participants",
 		Params: append(
 			[]interface{}{
 				api.SessionKey,
 				surveyID,
-				tokens,
+				tIds,
 			}, options...),
 	}
 	result, err := cmd.Execute(api.Url)
-	log.Println(result)
 	if err != nil {
 		return err
+	}
+
+	results := result.Result.(map[string]interface{})
+
+	for tId, r := range results {
+		msg := r.(string)
+		if strings.ToLower(msg) != "deleted" {
+			return fmt.Errorf("An error occurred deleting token ID %s: %s", tId, msg)
+		}
+	}
+
+	return nil
+}
+
+func (api *Client) InviteParticipants(surveyID int, tIds []string, options ...interface{}) error {
+	cmd := &Command{
+		Method: "invite_participants",
+		Params: append(
+			[]interface{}{
+				api.SessionKey,
+				surveyID,
+				tIds,
+			}, options...),
+	}
+	result, err := cmd.Execute(api.Url)
+	if err != nil {
+		return err
+	}
+
+	results := result.Result.(map[string]interface{})
+
+	log.Println(results)
+
+	for tId, r := range results {
+		msg := r.(string)
+		if strings.ToLower(msg) != "deleted" {
+			return fmt.Errorf("An error occurred deleting token ID %s: %s", tId, msg)
+		}
 	}
 
 	return nil
