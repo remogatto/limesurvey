@@ -12,6 +12,9 @@ services:
       - ./config:/app/application/config
       - /etc/localtime:/etc/localtime:ro
 
+  smtp:
+    image: digiplant/fake-smtp
+      
   db:
     image: mariadb
     container_name: remogatto_limesurvey_db_test

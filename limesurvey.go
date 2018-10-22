@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -120,7 +119,7 @@ func (api *Client) ExportResponses(surveyID int, docType string, options ...inte
 	return result.Result.(string), nil
 }
 
-func (api *Client) ListParticipants(surveyID int, options ...interface{}) (map[string]*Participant, error) {
+func (api *Client) ListParticipants(surveyID int, options ...interface{}) ([]*Participant, error) {
 	cmd := &Command{
 		Method: "list_participants",
 		Params: append(
@@ -134,7 +133,7 @@ func (api *Client) ListParticipants(surveyID int, options ...interface{}) (map[s
 		return nil, err
 	}
 
-	participants := make(map[string]*Participant)
+	participants := make([]*Participant, 0)
 	results := result.Result.([]interface{})
 	attrNames := make([]string, 0)
 	for _, r := range results {
@@ -151,20 +150,20 @@ func (api *Client) ListParticipants(surveyID int, options ...interface{}) (map[s
 			attributes[name] = r.(map[string]interface{})[name]
 
 		}
-		participants[token] = &Participant{
+		participants = append(participants, &Participant{
 			Firstname:  pInfo.(map[string]interface{})["firstname"].(string),
 			Lastname:   pInfo.(map[string]interface{})["lastname"].(string),
 			Email:      pInfo.(map[string]interface{})["email"].(string),
 			Token:      token,
 			TokenID:    tokenID,
 			Attributes: attributes,
-		}
+		})
 	}
 
 	return participants, nil
 }
 
-func (api *Client) AddParticipants(surveyID int, participants []map[string]string, options ...interface{}) (map[string]*Participant, error) {
+func (api *Client) AddParticipants(surveyID int, participants []map[string]string, options ...interface{}) ([]*Participant, error) {
 	cmd := &Command{
 		Method: "add_participants",
 		Params: append(
@@ -178,17 +177,17 @@ func (api *Client) AddParticipants(surveyID int, participants []map[string]strin
 	if err != nil {
 		return nil, err
 	}
-	responseParticipants := make(map[string]*Participant)
+	responseParticipants := make([]*Participant, 0)
 	results := result.Result.([]interface{})
 	for _, r := range results {
 		token := r.(map[string]interface{})["token"].(string)
-		responseParticipants[token] = &Participant{
+		responseParticipants = append(responseParticipants, &Participant{
 			Firstname: r.(map[string]interface{})["firstname"].(string),
 			Lastname:  r.(map[string]interface{})["lastname"].(string),
 			Email:     r.(map[string]interface{})["email"].(string),
 			TokenID:   r.(map[string]interface{})["tid"].(string),
 			Token:     token,
-		}
+		})
 	}
 
 	return responseParticipants, nil
@@ -209,12 +208,14 @@ func (api *Client) RemoveParticipants(surveyID int, tIds []string, options ...in
 		return err
 	}
 
-	results := result.Result.(map[string]interface{})
+	results, ok := result.Result.(map[string]interface{})
 
-	for tId, r := range results {
-		msg := r.(string)
-		if strings.ToLower(msg) != "deleted" {
-			return fmt.Errorf("An error occurred deleting token ID %s: %s", tId, msg)
+	if ok {
+		for tId, r := range results {
+			msg := r.(string)
+			if strings.ToLower(msg) != "deleted" {
+				return fmt.Errorf("An error occurred deleting token ID %s: %s", tId, msg)
+			}
 		}
 	}
 
@@ -238,17 +239,45 @@ func (api *Client) InviteParticipants(surveyID int, tIds []string, options ...in
 
 	results := result.Result.(map[string]interface{})
 
-	log.Println(results)
-
 	for tId, r := range results {
 		msg := r.(string)
 		if strings.ToLower(msg) != "deleted" {
-			return fmt.Errorf("An error occurred deleting token ID %s: %s", tId, msg)
+			return fmt.Errorf("An error occurred trying to send invite to token ID %s: %s", tId, msg)
 		}
 	}
 
 	return nil
 }
+
+// func (api *Client) AddParticipantProperties(surveyID int, participant interface{}, options ...interface{}) (map[string]string, error) {
+// 	cmd := &Command{
+// 		Method: "get_participant_properties",
+// 		Params: append(
+// 			[]interface{}{
+// 				api.SessionKey,
+// 				surveyID,
+// 				participants,
+// 			}, options...),
+// 	}
+// 	result, err := cmd.Execute(api.Url)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	responseParticipants := make(map[string]*Participant)
+// 	results := result.Result.([]interface{})
+// 	for _, r := range results {
+// 		token := r.(map[string]interface{})["token"].(string)
+// 		responseParticipants[token] = &Participant{
+// 			Firstname: r.(map[string]interface{})["firstname"].(string),
+// 			Lastname:  r.(map[string]interface{})["lastname"].(string),
+// 			Email:     r.(map[string]interface{})["email"].(string),
+// 			TokenID:   r.(map[string]interface{})["tid"].(string),
+// 			Token:     token,
+// 		}
+// 	}
+
+// 	return responseParticipants, nil
+// }
 
 func (api *Client) GetSurveyProperties(surveyID int) (map[string]interface{}, error) {
 	cmd := &Command{

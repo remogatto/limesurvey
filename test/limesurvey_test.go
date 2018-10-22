@@ -3,6 +3,7 @@ package limesurvey_test
 import (
 	"encoding/base64"
 	"encoding/csv"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -74,9 +75,13 @@ func (t *testSuite) TestExportResponses() {
 func (t *testSuite) TestListParticipants() {
 	ps, err := client.ListParticipants(297751, 0, 10, false, []string{"attribute_1", "attribute_2"})
 	t.Nil(err)
-	t.Equal("John", ps["eRWln1b85xEShOQ"].Firstname)
-	t.Equal("Foo 1", ps["eRWln1b85xEShOQ"].Attributes["attribute_1"].(string))
-	t.Equal("Foo 3", ps["0ZBh2Yz6hd6OrPN"].Attributes["attribute_1"].(string))
+	// t.Equal("John", ps["eRWln1b85xEShOQ"].Firstname)
+	// t.Equal("Foo 1", ps["eRWln1b85xEShOQ"].Attributes["attribute_1"].(string))
+	// t.Equal("Foo 3", ps["0ZBh2Yz6hd6OrPN"].Attributes["attribute_1"].(string))
+
+	t.Equal("John", ps[0].Firstname)
+	t.Equal("Foo 1", ps[0].Attributes["attribute_1"].(string))
+	t.Equal("Foo 3", ps[1].Attributes["attribute_1"].(string))
 
 	ps, err = client.ListParticipants(297751, 0, 10, false)
 	t.Nil(err)
@@ -109,6 +114,12 @@ func (t *testSuite) TestAddRemoveParticipants() {
 
 }
 
+func (t *testSuite) TestGetParticipantProperties() {
+	t.Pending()
+	// prop, err := client.GetParticipantProperties(297751, "1")
+	// t.Nil(err)
+}
+
 func (t *testSuite) TestInviteParticipants() {
 	ps, err := client.AddParticipants(297751, []map[string]string{
 		map[string]string{
@@ -119,9 +130,14 @@ func (t *testSuite) TestInviteParticipants() {
 			"attribute_2": "Foo 6",
 		},
 	})
-
-	err := client.InviteParticipants(297751, []string{"3"})
 	t.Nil(err)
+
+	// FIXME: not sure if really tested
+	for _, p := range ps {
+		err := client.InviteParticipants(297751, []string{p.TokenID})
+		t.False(strings.Contains(fmt.Sprintf("%s", err), "error"))
+	}
+
 }
 
 func (t *testSuite) TestGetSurveyProperties() {
@@ -145,8 +161,8 @@ func (t *testSuite) TestGetUploadedFiles() {
 	ps, err := client.ListParticipants(195163, 0, 2, false)
 	t.Nil(err)
 
-	for token, _ := range ps {
-		files, err := client.GetUploadedFiles(195163, token)
+	for _, p := range ps {
+		files, err := client.GetUploadedFiles(195163, p.Token)
 		if len(files) > 0 {
 			t.Nil(err)
 			t.Equal("foo.txt", files[0].Filename)
