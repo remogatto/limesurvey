@@ -180,7 +180,10 @@ func (api *Client) AddParticipants(surveyID int, participants []map[string]strin
 	responseParticipants := make([]*Participant, 0)
 	results := result.Result.([]interface{})
 	for _, r := range results {
-		token := r.(map[string]interface{})["token"].(string)
+		token, ok := r.(map[string]interface{})["token"].(string)
+		if !ok {
+			return nil, fmt.Errorf("A problem occured when adding participant %v", r)
+		}
 		responseParticipants = append(responseParticipants, &Participant{
 			Firstname: r.(map[string]interface{})["firstname"].(string),
 			Lastname:  r.(map[string]interface{})["lastname"].(string),
